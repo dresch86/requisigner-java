@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="requisigner-java" packages="">
+  <Appenders>
+    <Console name="RootToConsole" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} %-5level root - %msg%n" />
+    </Console>
+    <Console name="Console" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} %-5level %logger - %msg%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Logger name="io.requisigner" level="info" additivity="false">
+      <AppenderRef ref="Console"/>
+    </Logger>
+    <Root level="warn">
+      <AppenderRef ref="RootToConsole"/>
+    </Root>
+  </Loggers>
+</Configuration>
