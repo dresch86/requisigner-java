@@ -3,3 +3,9 @@
 
 # Ignore Gradle build output directory
 build
+
+# Hide config files
+config/
+
+# Track the config example
+!config/config.example.json

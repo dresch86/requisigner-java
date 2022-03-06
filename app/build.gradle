@@ -54,7 +54,7 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:3.0.0-RC1'
 }
 
-def propertiesFile = project.rootProject.file('local.properties')
+def propertiesFile = project.file('local.properties')
 def testConfig = ""
 
 if (propertiesFile.exists()) {
@@ -62,7 +62,7 @@ if (propertiesFile.exists()) {
     properties.load(propertiesFile.newDataInputStream())
     testConfig = properties.getProperty('application.test.config')
 } else {
-    testConfig = "config\\config.example.json"
+    testConfig = "..\\config\\config.example.json"
 }
 
 run {

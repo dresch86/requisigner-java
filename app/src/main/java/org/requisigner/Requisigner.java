@@ -96,9 +96,11 @@ public class Requisigner extends AbstractVerticle {
         hsHttpHandler.requestHandler(rMainRouter)
         .listen(cfgConfigHandler.getPort(), cfgConfigHandler.getAddress(), res -> {
             if (res.succeeded()) {
-                lMainLogger.info("Requisigner listening for requests...OK");
+                lMainLogger.info("Requisigner listening");
+                System.out.println("Requisigner listening for requests...");
             } else {
-                lMainLogger.fatal("Requisigner listening for requests...FAILED");
+                lMainLogger.fatal(res.cause().getMessage());
+                System.out.println("Requisigner failed to start...");
             }
         });
     }
@@ -120,7 +122,7 @@ public class Requisigner extends AbstractVerticle {
         opCLIOps.addOption("c", "config", true, "Path to configuration file");
         
         VertxOptions voVxOps = new VertxOptions();
-        voVxOps.setPreferNativeTransport(true);
+        //voVxOps.setPreferNativeTransport(true);
         
         Vertx vertx = Vertx.vertx(voVxOps);
         Requisigner rsAppInstance = new Requisigner(args, opCLIOps);

@@ -18,8 +18,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.CommandLineParser;
 
 public class Configuration {
-    private int iPort;
-    private String sAddress;
     private JsonObject joConfig;
 
     private static final Logger lMainLogger = LogManager.getLogger(Configuration.class.getName());
@@ -52,18 +50,18 @@ public class Configuration {
     }
 
     public JsonObject getSslConfig() {
-        return joConfig.getJsonObject("system").getJsonObject("http").getJsonObject("ssl");
+        return joConfig.getJsonObject("http").getJsonObject("ssl");
     }
 
     public int getPort() {
-        return iPort;
+        return joConfig.getJsonObject("http").getInteger("port");
     }
 
     public String getAddress() {
-        return sAddress;
+        return joConfig.getJsonObject("http").getString("address");
     }
 
     public String getTemplatesDir() {
-        return joConfig.getJsonObject("system").getJsonObject("filesystem").getString("templates");
+        return joConfig.getJsonObject("filesystem").getString("templates");
     }
 }
