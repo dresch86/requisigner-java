@@ -13,7 +13,7 @@ import io.vertx.core.net.PemKeyCertOptions;
 
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
 import io.vertx.ext.web.Router;
@@ -27,8 +27,7 @@ import org.apache.logging.log4j.LogManager;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
+import org.apache.pdfbox.pdmodel.interactive.form.PDSignatureField;
 
 public class Requisigner extends AbstractVerticle {
     private HttpServer hsHttpHandler;
@@ -54,22 +53,27 @@ public class Requisigner extends AbstractVerticle {
 
                 try {
                     PDDocument pdfTemplateVersion = Loader.loadPDF(response.result().getBytes());
-                    PDAcroForm pdfForm = new PDAcroForm(pdfTemplateVersion);
-
-                    for (PDField field : pdfForm.getFields()) {
-                        System.out.println(field.getPartialName());
+                    JsonArray jaSigFieldNames = new JsonArray();
+                    
+                    for (PDSignatureField field : pdfTemplateVersion.getSignatureFields()) {
+                        jaSigFieldNames.add(field.getPartialName());
                     }
 
-                    pdfTemplateVersion.getSignatureFields();
-
+                    routingContext.response()
+                    .setStatusCode(200)
+                    .putHeader("Content-Type", "application/json; charset=UTF8")
+                    .end(jaSigFieldNames.encodePrettily());
                 } catch (IOException e) {
-                   
-                    e.printStackTrace();
+                    lMainLogger.fatal(e.getMessage());
+                    routingContext.response()
+                    .setStatusCode(400)
+                    .end("A error occurred in reading the PDF file!");
                 }
-
-                routingContext.response().end();
             } else {
-
+                lMainLogger.fatal(response.cause().getMessage());
+                routingContext.response()
+                .setStatusCode(500)
+                .end("An error occurred in locating the PDF template version!");
             }
         });
     }
