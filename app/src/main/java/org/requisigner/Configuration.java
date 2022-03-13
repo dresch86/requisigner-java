@@ -34,6 +34,7 @@ public class Configuration {
                     String sJSONCfg = Files.readString(pConfigPath);
                     joConfig = new JsonObject(sJSONCfg);
                 } else {
+                    lMainLogger.fatal("Configuration file not found");
                     System.exit(1);
                 }
             } else {
